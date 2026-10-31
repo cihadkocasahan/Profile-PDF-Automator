@@ -1,45 +1,75 @@
-# 🚀 Profile-PDF-Automator
+# Profile-PDF-Automator — Zero-Config CI/CD Markdown to PDF Release Pipeline
 
-> **Automatically generate professional PDF resumes from Markdown files using GitHub Actions.**
+> **v1.0.0** • Free & Open Source • MIT License
 
-This project provides a "Plug-and-Play" solution to convert your Markdown-based CVs/Profiles into high-quality PDF assets and publish them as GitHub Releases automatically on every push.
+**Profile-PDF-Automator**, GitHub profillerinizde veya repolarınızda bulunan Markdown (`.md`) formatındaki özgeçmiş, teknik doküman ve portfolyo dosyalarınızı; her kod gönderiminde (`push`) **tamamen otomatik olarak profesyonel PDF belgelerine dönüştüren ve GitHub Releases sekmesinde güncel olarak yayınlayan** tak-çalıştır bir CI/CD otomasyon hattıdır.
 
----
+Geliştiricilerin Word, Canva veya harici PDF editörleriyle vakit kaybetmeden; sürüm kontrolü altında tutulan Markdown kaynak dosyalarından tek bir `git push` ile her zaman taze, profesyonel PDF çıktıları üretmesini sağlar.
 
-## 🇹🇷 Türkçe Kullanım Kılavuzu
-
-Bu araç, GitHub profilinizdeki Markdown dosyalarından otomatik olarak PDF üretmenizi ve bunları "Releases" sekmesinde yayınlamanızı sağlar.
-
-### 🛠️ Nasıl Kullanılır?
-1. **Dosyayı Kopyalayın:** `.github/workflows/generate-pdf.yml` dosyasını kendi reponuza kopyalayın.
-2. **Otomatik İsimlendirme:** Herhangi bir ayar yapmanıza gerek yok! Sistem, GitHub kullanıcı adınızı otomatik olarak algılar ve PDF dosyalarınızı `CV_KullaniciAdi_DosyaIsmi.pdf` şeklinde isimlendirir.
-3. **Pushlayın:** Kodunuzu pushladığınızda Actions devreye girer.
-
-### 🔑 Gerekli İzinler
-Workflow dosyasında `permissions: contents: write` ayarının olduğundan emin olun, aksi takdirde Release oluşturamaz.
+> [!IMPORTANT]
+> **Örnek & Eğitim Amaçlı DevOps Aracı:** Bu proje; GitHub Actions otomasyon hatları, Node.js tabanlı doküman motorları, otomatik versiyonlama ve Release yönetimi pratiklerini sergilemek amacıyla **açık kaynak ve referans portfolyo projesi** olarak hazırlanmıştır.
+> 
+> **Sorumluluk Reddi (Disclaimer):** Yazılım "olduğu gibi" (AS-IS) sunulmaktadır. Geliştirici; GitHub Actions kota aşımları, üçüncü parti npm paketlerinin çıktı farklılıkları veya oluşturulan PDF belgelerinin biçimlendirmesinden doğabilecek doğrudan veya dolaylı hiçbir zarardan sorumlu tutulamaz.
 
 ---
 
-## 🇬🇧 English Guide
+## ⚡ Temel Özellikler
 
-A standardized way to maintain professional PDF versions of your Markdown resumes without manual effort.
-
-### 🛠️ How to Use?
-1. **Copy the Workflow:** Place the `.github/workflows/generate-pdf.yml` file into your repository.
-2. **Automatic Naming:** Zero configuration needed! The system automatically detects your GitHub username and renames the output as `CV_Username_Filename.pdf`.
-3. **Push:** Just push your changes, and the automation handles the rest.
-
-### 🔑 Permissions
-Ensure your workflow includes `permissions: contents: write` to allow the Action to create and upload to Releases.
+- 🚀 **Sıfır Yapılandırma (Zero-Config):** Reponuza eklediğiniz anda hiçbir ayar gerektirmeden çalışır.
+- 👤 **Akıllı Dinamik İsimlendirme:** GitHub kullanıcı adınızı (`github.actor`) ve kaynak dosya adını otomatik algılayarak standart bir formatta (`CV_Username_Filename.pdf`) isimlendirir.
+- 🔄 **Otomatik GitHub Release Entegrasyonu:** Oluşturulan PDF dosyalarını her commit sonrası doğrudan reponuzun `Releases` sekmesine `latest` etiketiyle yükler ve linkleri güncel tutar.
+- ⚡ **Saf Node.js & npx Altyapısı:** Hantal veya güvensiz üçüncü parti eklentiler yerine doğrudan güncel Node.js (`npx md-to-pdf`) motorunu çalıştırır.
+- 🎯 **Akıllı Tetikleme (Filter Triggers):** Sadece `.md` dosyalarında değişiklik olduğunda devreye girer, gereksiz GitHub Actions dakikası harcamaz.
 
 ---
 
-## 🤖 The Workflow (Actions Logic)
+## 🚀 Hızlı Başlangıç (Nasıl Kullanılır?)
 
-The automation uses `baileyjm02/markdown-to-pdf` for rendering and `softprops/action-gh-release` for asset management. It is configured to run on **Node.js 24** for future-proof stability.
+Kendi profilinizde veya herhangi bir projenizde kullanmak yalnızca 2 adım sürer:
+
+### 1. Workflow Dosyasını Kopyalayın
+Bu projedeki [`.github/workflows/generate-pdf.yml`](.github/workflows/generate-pdf.yml) dosyasını kendi reponuzun `.github/workflows/` dizinine yerleştirin.
+
+### 2. GitHub İzinlerini Verin (Tek Seferlik)
+Workflow'un Releases oluşturabilmesi için reponuzun yetkisini kontrol edin:
+- Reponuzda **Settings** > **Actions** > **General** bölümüne gidin.
+- **Workflow permissions** altında **"Read and write permissions"** seçeneğini işaretleyip kaydedin.
+
+### 3. Değişiklikleri Gönderin (`git push`)
+Markdown dosyanızı düzenleyip repoya gönderdiğiniz anda GitHub Actions otomatik olarak devreye girer ve saniyeler içinde **Releases** sekmesinde PDF çıktınızı hazırlar!
 
 ---
-## 📄 License
-This project is licensed under the MIT License - feel free to use and share!
 
-*Developed with ❤️ by [Cihad Kocaşahan](https://github.com/cihadkocasahan)*
+## 🏗️ İş Akışı Mimarisi (Pipeline Flow)
+
+```text
+  [ Markdown Dosyası (.md) ] ── (git push) ──► [ GitHub Actions Trigger ]
+                                                         │
+                                                         ▼
+                                            [ Node.js & npx md-to-pdf ]
+                                            (Temiz render motoru)
+                                                         │
+                                                         ▼
+                                            [ Otomatik Dinamik İsimlendirme ]
+                                            (CV_cihadkocasahan_CV_TR.pdf)
+                                                         │
+                                                         ▼
+                                            [ GitHub Releases (Tag: latest) ]
+                                            (Doğrudan indirilebilir PDF linki)
+```
+
+---
+
+## 📄 Lisans
+
+Bu proje **MIT Lisansı** altında özgürce kullanılabilir, incelenebilir ve paylaşılabilir. Detaylar için [LICENSE](LICENSE) dosyasına bakabilirsiniz.
+
+---
+
+## 🎯 Proje Hakkında & Geliştirme Notu
+
+Bu proje; kurumsal CI/CD otomasyonlarını, doküman üretim hatlarını ve yapay zeka destekli mikro araç geliştirme pratiklerini somut bir örnek üzerinde sergilemek üzere **portfolyo ve referans aracı** olarak geliştirilmiştir.
+
+Geliştirme sürecinde modern yazılım disiplini ve yapay zeka destekli araçlar harmanlanarak; sade, amaca odaklı ve herkesin tek tıkla projesine entegre edebileceği temiz bir otomasyon hedeflenmiştir.
+
+Diğer çalışmalar ve detaylı teknik profil için: [cihadkocasahan](https://github.com/cihadkocasahan)
