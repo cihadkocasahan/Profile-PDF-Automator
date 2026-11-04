@@ -30,19 +30,37 @@ jobs:
 
       - name: Generate PDFs natively via npx
         run: |
-          # Use npx to process all markdown files securely without third-party action bugs
-          npx -y md-to-pdf ./*.md
+          # Use npx to process target markdown files (exclude repo README if specialized CV files exist)
+          shopt -s nullglob
+          files=(*.md)
+          targets=()
+          for f in "${files[@]}"; do
+            if [ "$f" != "README.md" ]; then
+              targets+=("$f")
+            fi
+          done
+          # If only README.md exists, use it as fallback
+          if [ ${#targets[@]} -eq 0 ] && [ -f "README.md" ]; then
+            targets=("README.md")
+          fi
+          if [ ${#targets[@]} -gt 0 ]; then
+            npx -y md-to-pdf "${targets[@]}"
+          fi
 
-      - name: Mix and Rename (Prefix + Actor + Filename + Suffix)
+      - name: Mix and Rename (Smart Deduplication & Formatting)
         run: |
           mkdir -p final_assets
-          # Find all PDFs in the current directory and rename them
-          find . -maxdepth 1 -name "*.pdf" | while read file; do
+          # Find all PDFs in the current directory and rename them cleanly
+          find . -maxdepth 1 -name "*.pdf" | while read -r file; do
             original_name=$(basename "$file")
-            # Creating the MIX: CV_cihadkocasahan_README.pdf
-            new_name="${{ env.FILE_PREFIX }}_${{ env.USER_NAME }}_${original_name}"
+            # If the filename already begins with CV_, keep it intact to avoid prefix duplication
+            if [[ "$original_name" =~ ^[Cc][Vv]_ ]]; then
+              new_name="$original_name"
+            else
+              new_name="${{ env.FILE_PREFIX }}_${{ env.USER_NAME }}_${original_name}"
+            fi
             mv "$file" "final_assets/${new_name}"
-            echo "Mixed and Generated: ${new_name}"
+            echo "Prepared Asset: ${new_name}"
           done
 
       - name: Create Release and Upload All Assets

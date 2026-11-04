@@ -16,7 +16,7 @@ Geliştiricilerin Word, Canva veya harici PDF editörleriyle vakit kaybetmeden; 
 ## ⚡ Temel Özellikler
 
 - 🚀 **Sıfır Yapılandırma (Zero-Config):** Reponuza eklediğiniz anda hiçbir ayar gerektirmeden çalışır.
-- 👤 **Akıllı Dinamik İsimlendirme:** GitHub kullanıcı adınızı (`github.actor`) ve kaynak dosya adını otomatik algılayarak standart bir formatta (`CV_Username_Filename.pdf`) isimlendirir.
+- 👤 **Akıllı Dinamik İsimlendirme:** Markdown dosyanız zaten `CV_` ile başlıyorsa adı korur; genel dokümanlar için ise GitHub kullanıcı adınızı (`github.actor`) ve standart formatı (`CV_Username_Filename.pdf`) otomatik uygular. Tekrarlanan ön ekleri önler.
 - 🔄 **Otomatik GitHub Release Entegrasyonu:** Oluşturulan PDF dosyalarını her commit sonrası doğrudan reponuzun `Releases` sekmesine `latest` etiketiyle yükler ve linkleri güncel tutar.
 - ⚡ **Saf Node.js & npx Altyapısı:** Hantal veya güvensiz üçüncü parti eklentiler yerine doğrudan güncel Node.js (`npx md-to-pdf`) motorunu çalıştırır.
 - 🎯 **Akıllı Tetikleme (Filter Triggers):** Sadece `.md` dosyalarında değişiklik olduğunda devreye girer, gereksiz GitHub Actions dakikası harcamaz.
@@ -51,7 +51,7 @@ Markdown dosyanızı düzenleyip repoya gönderdiğiniz anda GitHub Actions otom
                                                          │
                                                          ▼
                                             [ Otomatik Dinamik İsimlendirme ]
-                                            (CV_cihadkocasahan_CV_TR.pdf)
+                                            (CV_Cihad_Kocasahan_TR.pdf / CV_Username_Doc.pdf)
                                                          │
                                                          ▼
                                             [ GitHub Releases (Tag: latest) ]
